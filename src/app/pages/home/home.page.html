@@ -1,0 +1,16 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="end">
+      <ion-button (click)="logout()" color="danger" shape="round" class="logout-btn">
+        <ion-icon name="log-out-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Bonzami</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="text-center ion-padding center">
+  <ion-button (click)="scan()" shape="round" size="large" slots="icon-only" class="scan-btn">
+    <ion-icon name="barcode"></ion-icon>
+  </ion-button>
+</ion-content>

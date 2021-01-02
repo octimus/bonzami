@@ -1,0 +1,24 @@
+ion-content
+{
+    text-align: center;
+}
+
+ion-content .scan-btn{
+    border-radius: 100%;
+    margin:auto;
+    margin-top: 50%;
+    margin-bottom:12px;
+    width: 130px;
+    height: 130px;
+    font-size: xx-large;
+}
+.alert-success .confirm-button{
+    background-color: lime;
+    color:white;
+}
+ion-button.logout-btn{
+}
+.close-button{
+    background-color: maroon;
+    color:white;
+}

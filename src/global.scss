@@ -24,3 +24,31 @@
 @import "~@ionic/angular/css/text-alignment.css";
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
+
+
+.alert-success .alert-wrapper {
+    background:rgb(58, 165, 58);
+    .alert-button{
+        color: yellow;
+    }
+}
+.alert-danger .alert-wrapper {
+    background: #eb445a;
+    .alert-button{
+        color: yellow;
+    }
+}
+.alert-warning .alert-wrapper {
+    background: orange;
+    .alert-button{
+        color: yellow;
+    }
+}
+.alert-success .alert-wrapper .alert-message, .alert-warning .alert-wrapper .alert-message, .alert-danger .alert-wrapper .alert-message{
+    color:rgb(255, 255, 255);
+}
+
+.alert-dark .alert-wrapper {
+    background: rgba(41, 41, 40, 0.801);
+    --color:rgb(179, 175, 175);
+}
