@@ -116,7 +116,7 @@ export class UserDataService {
         this.presentAlert("data", "", data.data);
       }
     }, (error)=>{
-      this.presentAlert('Problème de connexion', '', JSON.stringify(error));
+      this.presentAlert('Problème de connexion', '', "");
       // this.createClient()
     });
   }
