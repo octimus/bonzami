@@ -4,13 +4,14 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, from } from 'rxjs';
 import { Platform } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiKinuService {
     
-  api_url: string = "https://www.stationsbonzami.com";
+  api_url: string = environment.apiUrl;
   public native: boolean = true;
   private entete: {} = {};
   

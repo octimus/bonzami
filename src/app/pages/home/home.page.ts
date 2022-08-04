@@ -24,11 +24,78 @@ export class HomePage implements OnInit {
   ngOnInit() {
   }
 
-  scan(){
-    let l;
+  processData(json: any, scanTxt:any, verify: any) {
     let cssClass = '';
     let message: string = '';
+    const validHeader: string = verify === "verify" ? "Ticket Valide" : "Véhicule Valide";
 
+    if(json["status"] == "error"){
+      this.alertCtrl.create({header:"Erreur", message:json["message"], buttons:["OK"]}).then(a=>a.present());
+    }
+    else{
+      //manipulons la reponse
+
+      if(json["status"] == "OK"){
+        if(json["autorise"] == "OUI"){
+          if(verify != "verifyflotte"){
+            cssClass = "alert-success";
+          }else
+            cssClass = "alert-info";
+          message = json["produit"]+" : "+json["quantite"]+" L.";
+        }
+        else
+        {
+          cssClass = "alert-dark";
+          message = json["message"];
+        }
+      }
+      else if(json["status"] == "KO"){
+        cssClass = "alert-danger";
+        message = json["message"];
+      }
+      else if(json["status"] == "ALERT"){
+        cssClass = "alert-warning";
+        message = json["message"];
+      }else{
+        message = json["message"];
+      }
+      let code = scanTxt.split("/")[0];
+      this.alertCtrl.create(
+        {
+          cssClass: cssClass,
+          header: json["status"] == "ALERT" ? "ALERT" : (json["autorise"]=='OUI' ? `${validHeader}` : ""), 
+          subHeader: code,
+          message: "<h2>"+message+"</h2>",
+          inputs:verify == "verifyflotte" && json["status"] == "OK" && json["autorise"] == "OUI"? [{
+            name:"quantite",
+            placeholder: "Quantité demandée",
+            type:"number",
+            max: json["quantite"],
+            min: 1,
+          }] : [],
+          buttons: json["status"] == "OK" && json["autorise"] == "OUI" ? 
+          [
+            {
+              text:"Confirmer",
+              handler:(p)=>this.confirmer(json["check_id"], p, ()=>{this.processData(json, scanTxt, verify)}),
+              cssClass:"confirm-button",
+              
+            }, 
+            {
+              text:"Fermer", 
+              cssClass:"close-button"
+            }
+          ] :  ["OK"]
+        }).then((al)=>{
+          al.present();
+        });
+    }
+  }
+
+  scan(verify = "verify"){
+    let l;
+    // this.processData({'status':'OK','autorise':'OUI','produit':"PETROLE", 		'quantite':40, 'check_id':1, 'matricule':'780AB73'}, "150MB73/1", verify);
+    // return;
     this.loadingController.create({message:"Chargement..."}).then((ll)=>{
       l = ll;
     });
@@ -40,61 +107,11 @@ export class HomePage implements OnInit {
         return;
       }
       
-      this.apiKinu.getData(`/api/ticket/verify/${data.text}`, {}).subscribe((result)=>{
+      this.apiKinu.getData(`/api/ticket/${verify}/${data.text}`, {}).subscribe((result)=>{
         l.dismiss();
         let json = JSON.parse(result.data);
 
-        if(json["status"] == "error"){
-          this.alertCtrl.create({header:"Erreur", message:json["message"], buttons:["OK"]}).then(a=>a.present());
-        }
-        else{
-          //manipulons la reponse
-
-          if(json["status"] == "OK"){
-            if(json["autorise"] == "OUI"){
-              cssClass = "alert-success";
-              message = json["produit"]+" : "+json["quantite"]+" L.";
-            }
-            else
-            {
-              cssClass = "alert-dark";
-              message = json["message"];
-            }
-          }
-          else if(json["status"] == "KO"){
-            cssClass = "alert-danger";
-            message = json["message"];
-          }
-          else if(json["status"] == "ALERT"){
-            cssClass = "alert-warning";
-            message = json["message"];
-          }else{
-            message = json["message"];
-          }
-          let code = data.text.split("/")[0];
-          this.alertCtrl.create(
-            {
-              cssClass: cssClass,
-              header: json["status"] == "ALERT" ? "ALERT" : (json["autorise"]=='OUI' ? `Ticket Valide` : ""), 
-              subHeader: code,
-              message: message,
-              buttons: json["status"] == "OK" && json["autorise"] == "OUI" ? 
-              [
-                {
-                  text:"Confirmer", 
-                  handler:()=>this.confirmer(json["check_id"]),
-                  cssClass:"confirm-button",
-                  
-                }, 
-                {
-                  text:"Fermer", 
-                  cssClass:"close-button"
-                }
-              ] :  ["OK"]
-            }).then((al)=>{
-              al.present();
-            });
-        }
+        this.processData(json, data.text, verify);
       }, (err)=>{
         l.dismiss();
         alert(JSON.stringify(err));
@@ -102,11 +119,20 @@ export class HomePage implements OnInit {
     }).catch((err)=>{
       l.dismiss();
       alert(JSON.stringify(err));
+
     })
   }
-  confirmer(check_id:string){
+  confirmer(check_id:string, p, reopen){
+    if(!p.quantite || p.quantite < 1)
+    {  
+      alert("Quantité incorrecte");
+      reopen();
+      return;
+    }
+
+    let url: string = typeof(p) == "undefined" ? "/api/ticket/check/"+check_id : `/api/ticket/checkflotte/${check_id}/${p.quantite}`
     this.loader.presentLoading();
-    this.apiKinu.getData("/api/ticket/check/"+check_id, {}).subscribe(async (result)=>{
+    this.apiKinu.getData(url, {}).subscribe(async (result)=>{
       this.loader.dismissLoading();
       let json = JSON.parse(result.data);
       let al: HTMLIonAlertElement = await this.alertCtrl.create(

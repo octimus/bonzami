@@ -3,22 +3,26 @@ ion-content
     text-align: center;
 }
 
-ion-content .scan-btn{
-    border-radius: 100%;
+ion-content ion-button{
     margin:auto;
-    margin-top: 50%;
-    margin-bottom:12px;
-    width: 130px;
-    height: 130px;
-    font-size: xx-large;
+    margin-top: 10vh;
+    font-size: x-large;
+    color:white;
 }
 .alert-success .confirm-button{
     background-color: lime;
     color:white;
 }
-ion-button.logout-btn{
+
+.alert-message
+{
+    font-size: larger;
+    font-weight: bolder;
 }
 .close-button{
     background-color: maroon;
     color:white;
+}
+p{
+    margin-top: 10vh;
 }

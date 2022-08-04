@@ -10,7 +10,13 @@
 </ion-header>
 
 <ion-content class="text-center ion-padding center">
-  <ion-button (click)="scan()" shape="round" size="large" slots="icon-only" class="scan-btn">
-    <ion-icon name="barcode"></ion-icon>
-  </ion-button>
+    <ion-button (click)="scan()" expand="block" shape="round" size="large">
+      <ion-icon name="barcode" slot="start"></ion-icon>
+      Ticket
+    </ion-button>
+
+    <ion-button (click)="scan('verifyflotte')" expand="block" shape="round" size="large" color="warning">
+      <ion-icon name="car" slot="start"></ion-icon>
+      Véhicule
+    </ion-button>
 </ion-content>

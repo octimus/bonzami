@@ -3,6 +3,7 @@ import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree } fro
 import { Observable } from 'rxjs';
 import { NavController } from '@ionic/angular';
 import { UserDataService } from '../services/user-data/user-data.service';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -12,14 +13,14 @@ export class AuthGuard implements CanActivate {
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
+      // if(environment.production === false)
+      //   return true;
     return this.userData.hasLoggedIn().then((data)=>{
-      console.log(data)
       if(!data)
         this.navCtrl.navigateRoot(['/signin'])
         
       return data;
     }, (err)=>{
-      console.error(err);
       return false;
     })
   }

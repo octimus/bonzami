@@ -6,6 +6,7 @@ import { HTTP } from '@ionic-native/http/ngx';
 import { ApiKinuService } from '../api-kinu/api-kinu.service';
 import { from, Observable } from 'rxjs';
 import { Device } from '@ionic-native/device/ngx';
+import { environment } from 'src/environments/environment';
 
 
 @Injectable({
@@ -26,7 +27,7 @@ export class UserDataService {
   HAS_SEEN_SETTINGS_TUT = 'hasSeenSettingsTut';
   HAS_SEEN_TUTORIAL = 'hasSeenTutorial';
   address_serveur:string = "";
-  api_url: string = "https://www.stationsbonzami.com";
+  api_url: string = environment.apiUrl;;
 
   public loader: Loader;
   public step:any = 0;
@@ -160,6 +161,7 @@ export class UserDataService {
           this.loader.dismissLoading();
     
           try {
+            alert(JSON.stringify(error))
             let errorData = JSON.parse(error.error);
             this.presentAlert("Problème d'authentification", "", errorData.error_description);
           } catch (error) {
