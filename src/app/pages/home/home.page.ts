@@ -66,7 +66,7 @@ export class HomePage implements OnInit {
           header: json["status"] == "ALERT" ? "ALERT" : (json["autorise"]=='OUI' ? `${validHeader}` : ""), 
           subHeader: code,
           message: "<h2>"+message+"</h2>",
-          inputs:verify == "verifyflotte" && json["status"] == "OK" && json["autorise"] == "OUI"? [{
+          inputs:verify == "verifyflotte" && json["status"] == "OK" && json["autorise"] == "OUI" ? [{
             name:"quantite",
             placeholder: "Quantité demandée",
             type:"number",
@@ -114,7 +114,7 @@ export class HomePage implements OnInit {
         this.processData(json, data.text, verify);
       }, (err)=>{
         l.dismiss();
-        alert(JSON.stringify(err));
+        alert(err.error_description ?? err.error?.error_description ?? "Echec!");
       })
     }).catch((err)=>{
       l.dismiss();
@@ -123,7 +123,7 @@ export class HomePage implements OnInit {
     })
   }
   confirmer(check_id:string, p, reopen){
-    if(!p.quantite || p.quantite < 1)
+    if(p?.quantite && p.quantite < 1)
     {  
       alert("Quantité incorrecte");
       reopen();
@@ -143,7 +143,8 @@ export class HomePage implements OnInit {
       al.present();
     }, (error)=>{
       this.loader.dismissLoading();
-      alert(JSON.stringify(error));
+      error = typeof error === "string" ? JSON.parse(error) : error;
+      alert(error.error?.error_description ?? error.error_description);
     })
   }
 

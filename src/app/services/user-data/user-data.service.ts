@@ -161,7 +161,6 @@ export class UserDataService {
           this.loader.dismissLoading();
     
           try {
-            alert(JSON.stringify(error))
             let errorData = JSON.parse(error.error);
             this.presentAlert("Problème d'authentification", "", errorData.error_description);
           } catch (error) {
