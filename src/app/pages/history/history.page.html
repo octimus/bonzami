@@ -1,0 +1,32 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Historiques</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-item>
+    <ion-label>Date</ion-label>
+    <ion-datetime [(ngModel)]="date" display-format="DD/MM/YYYY" (ionChange)="refresh($event)"></ion-datetime>
+  </ion-item>
+  <p *ngIf="loading" class="ion-text-center">
+    Chargement ...
+  </p>
+  <ion-list>
+    <ng-container *ngIf="consomations?.consomTickets">
+      <ion-list-header>
+        <h2>Tickets</h2>
+      </ion-list-header>
+      <app-history-card [consomation]="consomations.consomTickets"></app-history-card>
+    </ng-container>
+    <ng-container *ngIf="consomations?.consomVehicules">
+      <ion-list-header>
+        <h2>Véhicules</h2>
+      </ion-list-header>
+      <app-history-card [consomation]="consomations.consomVehicules"></app-history-card>
+    </ng-container>
+  </ion-list>
+</ion-content>

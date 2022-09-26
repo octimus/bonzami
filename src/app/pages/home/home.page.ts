@@ -24,6 +24,10 @@ export class HomePage implements OnInit {
   ngOnInit() {
   }
 
+  openHistory(): void {
+    this.navCtrl.navigateForward('history');
+  }
+
   processData(json: any, scanTxt:any, verify: any) {
     let cssClass = '';
     let message: string = '';

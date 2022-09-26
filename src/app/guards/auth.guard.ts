@@ -13,8 +13,8 @@ export class AuthGuard implements CanActivate {
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-      // if(environment.production === false)
-      //   return true;
+      if(environment.production === false)
+        return true;
     return this.userData.hasLoggedIn().then((data)=>{
       if(!data)
         this.navCtrl.navigateRoot(['/signin'])
