@@ -14,6 +14,7 @@ const { App } = Plugins;
 export class HomePage implements OnInit {
 
   private loader: Loader;
+  public userName: string;
   constructor(private bScanner: BarcodeScanner, private apiKinu: ApiKinuService, 
     private alertCtrl: AlertController, 
     private loadingController: LoadingController, private userData: UserDataService, private navCtrl: NavController) { 
@@ -22,6 +23,7 @@ export class HomePage implements OnInit {
     }
 
   ngOnInit() {
+    this.userData.getUsername().then((username) => {this.userName = username;});
   }
 
   openHistory(): void {

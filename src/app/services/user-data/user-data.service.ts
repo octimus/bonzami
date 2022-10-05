@@ -150,6 +150,7 @@ export class UserDataService {
           this.access_token = data["access_token"]
           superClass.storage.set('expires_in', data["expires_in"]);
           superClass.storage.set('token_type', data["token_type"]);
+          this.setUsername(userInfo.username);
           superClass.storage.set('refresh_token', data["refresh_token"]);
           superClass.storage.set('scope', data["scope"]);
     
@@ -303,7 +304,7 @@ export class UserDataService {
   };
   
   setUsername(username: string): void {
-    this.loader.presentLoading();
+    this.storage.set("username", username);
   };
   setEmail(username: string): void {
   };
